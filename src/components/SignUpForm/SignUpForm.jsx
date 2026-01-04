@@ -1,6 +1,9 @@
 import { useState } from "react"
+import { signUp } from "../../services/authService";
+import { useNavigate } from "react-router";
 
 function SignUpForm() {
+    const navigate = useNavigate()
 
     const [formData, setFormData] = useState({
     username: '',
@@ -18,7 +21,19 @@ function SignUpForm() {
     async function handleSubmit (event){
         event.preventDefault()
         delete formData.confirmPassword
-        console.log(formData)
+        const response = await signUp(formData)
+        console.log(response);
+        if (response){
+            navigate('/')
+        }
+        else{
+            console.log('Ran into an error');
+            setFormData({
+                username: '',
+                password: '',
+                confirmPassword: '',
+            })
+        }
         
     }
 
