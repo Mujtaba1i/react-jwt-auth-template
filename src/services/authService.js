@@ -8,7 +8,11 @@ async function signUp (formData){
         const token = data.token
 
         localStorage.setItem('token', token)
-        return token
+
+        const encodedPayload = token.split('.')[1]
+        const decodedPayload = atob(encodedPayload)
+        const parsedPayload = (JSON.parse(decodedPayload)).payload
+        return parsedPayload
     } catch (err) {
         console.log('Ran into an error: '+ err);
     }
