@@ -1,19 +1,18 @@
 import { useContext, useState } from "react"
-import { signUp } from "../../services/authService";
+import { signIn } from "../../services/authService";
 import { useNavigate } from "react-router";
 import { UserContext } from "../../contexts/UserContext";
 
-function SignUpForm() {
+function SignInForm() {
     const navigate = useNavigate()
     const {setUser} = useContext(UserContext)
 
     const [formData, setFormData] = useState({
     username: '',
     password: '',
-    confirmPassword: '',
   })
 
-    const { username, password, confirmPassword } = formData;
+    const { username, password } = formData;
     
     function handleChange(event){
         setFormData({...formData,[event.target.name]:event.target.value})
@@ -22,8 +21,7 @@ function SignUpForm() {
     
     async function handleSubmit (event){
         event.preventDefault()
-        delete formData.confirmPassword
-        const response = await signUp(formData)
+        const response = await signIn(formData)
         if (response){
             setUser(response)
             navigate('/')
@@ -33,13 +31,10 @@ function SignUpForm() {
             setFormData({
                 username: '',
                 password: '',
-                confirmPassword: '',
             })
         }
         
     }
-
-    const isFormInvalid = () => !(username && password && password === confirmPassword)
 
   return (
     <div>
@@ -51,10 +46,7 @@ function SignUpForm() {
             <label htmlFor="password">password: </label>
             <input name="password" id="password" type="password" onChange={handleChange} value={password}/><br /><br />
 
-            <label htmlFor="confirm-password">confirm password: </label>
-            <input name="confirmPassword" id="confirm-password" type="password" onChange={handleChange} value={confirmPassword}/><br /><br />
-            
-            <button disabled={isFormInvalid()}>Sign Up</button><br /><br />
+            <button>Sign In</button><br /><br />
             <button onClick={() => navigate('/')}>Cancel</button>
 
         </form>
@@ -62,4 +54,4 @@ function SignUpForm() {
   )
 }
 
-export default SignUpForm
+export default SignInForm
